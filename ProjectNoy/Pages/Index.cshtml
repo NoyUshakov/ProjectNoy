@@ -1,0 +1,52 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1>ברוכים הבאים לאתר המוזיקה</h1>
+    </div>
+<div>
+    <p>אתר זה מציע פלטפורמה אינטרנטית המרכזת פרטים מקיפים על אמנים מעולם המוזיקה, מן העבר וההווה. באתר ניתן למצוא ביוגרפיות של מוזיקאים, סקירה על תחילת דרכם, נקודות מפתח בקריירה, הישגים בולטים, וזכיות בפרסים. בנוסף, האתר מציע מידע על אלבומים וסינגלים, תאריכי יציאה, שיתופי פעולה עם אמנים אחרים, ולפעמים גם ניתוחים מוזיקליים של יצירות.</p>
+    <p>אתר מסוג זה מהווה מקור ידע נגיש ומקיף עבור חובבי מוזיקה, סטודנטים, אנשי תקשורת וכל מי שמעוניין להעמיק את הידע שלו על עולם המוזיקה ועל היוצרים שמעצבים אותו.</p>
+</div>
+<div id="carouselExampleCaptions" class="carousel slide">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="~/images/beethoven banner.webp" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block">
+                <h5 class="text-box">בטהובאן</h5>
+                <p class="text-box">מוזיקה קלאסית</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="~/images/graduation banner.jpg" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block">
+                <h5 class="text-box">Graduation</h5>
+                <p class="text-box">האלבום ראפ הכי טוב בכל הזמנים</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+        
+            <img src="~/images/guns n' roses banner.jpg" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block">
+                <h5 class="text-box">Guns N Roses</h5>
+                <p class="text-box">מוזיקת רוק</p>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
