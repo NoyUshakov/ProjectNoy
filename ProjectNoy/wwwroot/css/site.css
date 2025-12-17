@@ -43,3 +43,17 @@ h1{
     color: white; /* keep text visible */
     padding: 10px;
 }
+table {
+    margin: 0 auto; /* Centers the table horizontally */
+    border-collapse: collapse;
+    text-align: center; /* Centers text inside cells */
+}
+
+th {
+        border: 1px solid black; /* Table cell borders */
+        padding: 10px;
+    }
+th {
+    border: 1px solid black; /* Table cell borders */
+    padding: 10px;
+}
