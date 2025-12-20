@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace ProjectNoy.Pages.each
+namespace ProjectNoy.Pages.classical
 {
-    public class beethovenModel : PageModel
+    public class mozartModel : PageModel
     {
         public void OnGet()
         {
