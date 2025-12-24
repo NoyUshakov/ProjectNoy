@@ -94,3 +94,9 @@ td {
     height: 400px; /* banner height */
     object-fit: cover; /* crops nicely without stretching */
 }
+.nav-item{
+    font-size:18px;
+}
+.nav-link {
+    margin-left: 50px;
+}
