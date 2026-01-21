@@ -2,22 +2,55 @@
 @model ProjectNoy.Pages.registerModel
 @{
 }
-<form action="action_page.php">
+
+<form method="post" onsubmit="return validateRegister();">
     <div class="container">
-        <h1>דף הרשמה</h1>
-        <p>הירשם לאתר עוד היום</p>
+        <h1>הירשם לאתר עוד היום!</h1>
         <hr>
 
-        <label for="email"><b>אימייל</b></label>
-        <input type="text" placeholder="הכנס אימייל" name="email" id="email" required>
+        <label><b>שם משתמש</b></label>
+        <input type="text" id="username" />
+        <span class="error" id="usernameErr"></span>
 
-        <label for="psw"><b>סיסמה</b></label>
-        <input type="password" placeholder="הכנס סיסמה" name="psw" id="psw" required />
-        
-        <button type="submit" class="registerbtn">הירשם</button>
-    </div>
+        <label><b>סיסמה</b></label>
+        <input type="password" id="password" />
+        <span class="error" id="passwordErr"></span>
 
-    <div class="container signin">
-        <p> לחשבון קיים <a href="login">התחבר</a>.</p>
+        <label><b>אימות סיסמה</b></label>
+        <input type="password" id="confirmPassword" />
+        <span class="error" id="confirmPasswordErr"></span>
+
+        <label><b>שם פרטי</b></label>
+        <input type="text" id="firstName" />
+        <span class="error" id="firstNameErr"></span>
+
+        <label><b>שם משפחה</b></label>
+        <input type="text" id="lastName" />
+        <span class="error" id="lastNameErr"></span>
+
+        <label><b>תאריך לידה</b></label>
+        <input type="date" id="birthDate" />
+        <span class="error" id="birthDateErr"></span>
+
+        <label><b>עיר</b></label>
+        <input type="text" id="city" />
+
+        <label><b>טלפון</b></label>
+        <input type="text" id="phone" placeholder="05X-XXXXXXX" />
+        <span class="error" id="phoneErr"></span>
+
+        <label><b>דוא״ל</b></label>
+        <input type="text" id="email" />
+        <span class="error" id="emailErr"></span>
+
+        <hr>
+
+        <button type="submit">הירשם</button>
+        <button type="reset">אפס טופס</button>
     </div>
 </form>
+
+@section Scripts {
+    <script src="~/js/signup.js"></script>
+}
+

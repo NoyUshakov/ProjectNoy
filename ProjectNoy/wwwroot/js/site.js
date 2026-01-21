@@ -3,6 +3,5 @@
 
 // Write  JavaScript code.
 function error() {
-    alert('שגיאה בהרשמה. אנא נסו שוב מאוחר יותר');
-    return false;
+    
 }

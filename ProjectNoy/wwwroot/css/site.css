@@ -227,3 +227,9 @@ a {
     color: white;
     opacity: 1; /* Firefox sets a lower opacity by default, this fixes it */
 }
+.error {
+    color: red;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 10px;
+}
