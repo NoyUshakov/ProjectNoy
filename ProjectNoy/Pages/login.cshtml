@@ -2,20 +2,34 @@
 @model ProjectNoy.Pages.loginModel
 @{
 }
-<form action="action_page.php" method="post">
-  
 
-    <div class="container">
-        <label for="uname"><b>שם משתמש</b></label>
-        <input type="text" placeholder="רשום שם משתמש" name="uname" required>
+<div class="container" style="direction: rtl;">
+    <h2>כניסה למערכת</h2>
 
-        <label for="psw"><b>סיסמה</b></label>
-        <input type="password" placeholder="רשום סיסמה" name="psw" required>
+    <form id="loginForm" method="post">
+        <div class="form-group">
+            <label for="uname"><b>שם משתמש:</b></label>
+            <input type="text" id="uname" name="Uname" required
+                   placeholder="מינימום 2 תווים, מתחיל באות אנגלית"
+                   pattern="^[a-zA-Z][a-zA-Z0-9!@@#$%^&*]*$"
+                   title="חובה להתחיל באות אנגלית, ללא עברית או רווחים">
+        </div>
 
-        <button type="submit">התחבר</button>
+        <div class="form-group">
+            <label for="psw"><b>סיסמה:</b></label>
+            <input type="password" id="psw" name="Psw" required
+                   placeholder="6-12 תווים, אות גדולה, מספר ותו">
+            <div id="passError" style="color:red; font-size: 0.8em; min-height: 1.2em;"></div>
+        </div>
 
-        <a href="register" class="button">להרשמה</a>
-    </div>
+        <div class="buttons">
+            <button type="submit">התחבר</button>
+            <button type="reset" id="resetBtn">איפוס</button>
+        </div>
+    </form>
 
+    <br />
+    <a href="/register">עוד לא רשום? להרשמה</a>
+</div>
 
-</form>
+<script src="~/js/login.js"></script>
