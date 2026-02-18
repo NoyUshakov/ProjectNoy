@@ -4,16 +4,51 @@
     ViewData["Title"] = "Access Denied";
 
 }
-<div class="container text-center mt-5">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="alert alert-danger" role="alert">
-                <h1 class="display-4">Access Denied</h1>
-                <p class="lead">You do not have permission to view this page.</p>
-                <hr class="my-4">
-                <p>Please contact your administrator if you believe this is an error.</p>
-                <a class="btn btn-primary btn-lg" href="/" role="button">Go to Homepage</a>
+<div class="container mt-5" dir="rtl">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            @* כרטיס רקע כהה עם טקסט בהיר *@
+            <div class="card bg-dark text-white shadow-lg border-secondary">
+                <div class="card-body py-5">
+
+                    @* אייקון בולט בצבע אדום בהיר/כתום *@
+                    <h1 class="display-1 text-warning mb-4">
+                        <i class="bi bi-exclamation-octagon-fill"></i>
+                        <span style="color: #ff4d4d;">🚫</span>
+                    </h1>
+
+                    <h2 class="mb-3 fw-bold text-light">הגישה נחסמה</h2>
+
+                    <p class="lead" style="color: #e0e0e0;">
+                        מצטערים, אין לך את ההרשאות המתאימות לצפייה בתוכן זה.
+                    </p>
+
+                    <hr class="my-4 border-secondary">
+
+                    <p class="small" style="color: #b0b0b0;">
+                        ייתכן ותצטרך/י להתחבר לאתר בכדי לצפות בתוכן
+                    </p>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+                        @* כפתור בולט בלבן/בהיר *@
+                        <a asp-page="/login" class="btn btn-light px-4 fw-bold">
+                            התחבר לאתר
+                        </a>
+                        <a asp-page="/Index" class="btn btn-light px-4 fw-bold">
+                            חזרה לדף הבית
+                        </a>
+                        
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    /* הוספת רקע כהה לדף כולו למראה מושלם, אם תרצה */
+    body {
+        background-color: #121212;
+    }
+</style>

@@ -42,7 +42,24 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/login">התחבר</a>
                         </li>
+                        @if (adminValue == "True")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/UsersTable">טבלת משתמשים</a>
+                            </li>
+                        }
                     </ul>
+                    @if (string.IsNullOrEmpty(sessionValue))
+                    {
+                        <span class="navbar-text">שלום אורח!</span>
+                    }
+                    else
+                    {
+                        <span class="navbar-text">welcome @sessionValue</span>
+                        <div class="d-flex">
+                            <a class="btn btn-outline-dark btn-sm ms-1" href="/Users/Logout" role="button">התנתק</a>
+                        </div>
+                    }
                 </div>
             </div>
         </nav>
