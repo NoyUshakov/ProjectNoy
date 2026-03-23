@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 
-namespace ProjectNoy.Pages
+namespace ProjectNoy.Pages.Users
 {
     public class UsersTableModel : PageModel
     {
