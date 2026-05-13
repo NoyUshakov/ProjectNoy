@@ -1,4 +1,29 @@
 ﻿@page
-@model ProjectNoy.Pages.UsersTableModel
+@model ProjectNoy.Pages.Users.UsersTableModel
+@using System.Data
 @{
+    ViewData["Title"] = "UsersTable";
 }
+<h1>UsersTable</h1>
+
+<table class='table'>
+    <thead>
+        <tr>
+            @foreach (DataColumn column in Model.dt.Columns)
+            {
+                <th>@column.ColumnName</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (DataRow row in Model.dt.Rows)
+        {
+            <tr>
+                @foreach (DataColumn column in Model.dt.Columns)
+                {
+                    <td>@row[column]</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

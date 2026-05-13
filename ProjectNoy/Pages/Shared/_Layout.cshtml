@@ -1,7 +1,8 @@
 ﻿﻿@using Microsoft.AspNetCore.Http
 @{
     var sessionValue = Context.Session.GetString("login");
-    var adminValue = Context.Session.GetString("admin");
+    //var adminValue = Context.Session.GetString("admin");
+    var adminValue = true;
 }
 
 <!DOCTYPE html>
@@ -42,10 +43,10 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/login">התחבר</a>
                         </li>
-                        @if (adminValue == "True")
+                        @if (adminValue == true)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/UsersTable">טבלת משתמשים</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Users/UsersTable">טבלת משתמשים</a>
                             </li>
                         }
                     </ul>
