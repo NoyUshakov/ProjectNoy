@@ -1,108 +1,94 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using ProjectNoy.Model;
-using System;
 using System.Data;
 using System.IO;
+using System;
 
 namespace ProjectNoy.Model
 {
     public class Helper
     {
-        private string conString;
+        private string conString = "connection string";
 
         public Helper()
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("appsettings.json")
                 .Build();
-
             conString = configuration.GetConnectionString("UsersDB");
-
-            // Safety Check: Avoid uninitialized connection string exceptions downstream
-            if (string.IsNullOrEmpty(conString))
-            {
-                throw new InvalidOperationException(
-                    "Error: The connection string 'UsersDB' could not be found. " +
-                    "Ensure 'appsettings.json' has a 'ConnectionStrings' section containing 'UsersDB'.");
-            }
         }
 
         public DataTable RetrieveTable(string SQLStr, string table)
+        // Gets A table from the data base acording to the SELECT Command in SQLStr;
+        // Returns DataTable with the Table.
         {
-            // 'using' statements automatically close and dispose connections safely
-            using (SqlConnection con = new SqlConnection(conString))
-            {
-                using (SqlCommand cmd = new SqlCommand(SQLStr, con))
-                {
-                    using (SqlDataAdapter ad = new SqlDataAdapter(cmd))
-                    {
-                        DataSet ds = new DataSet();
-                        ad.Fill(ds, table);
-                        return ds.Tables[table];
-                    }
-                }
-            }
+            SqlConnection con = new SqlConnection(conString);
+            SqlCommand cmd = new SqlCommand(SQLStr, con);
+            SqlDataAdapter ad = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            ad.Fill(ds, table);
+
+            return ds.Tables[table];
         }
 
         public int Insert(User user, string table)
+        // The Method recieve a user objects and insert it to the Database as new row. 
+        // if the user is already taken the method will return -1.
         {
-            using (SqlConnection con = new SqlConnection(conString))
+            SqlConnection con = new SqlConnection(conString);
+
+            string SQLStr = $"SELECT * FROM {table} WHERE Username Like '{user.Username}'";
+            SqlCommand cmd = new SqlCommand(SQLStr, con);
+            DataSet ds = new DataSet();
+
+            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+            adapter.Fill(ds, table);
+
+            if (ds.Tables[table].Rows.Count > 0)
             {
-                // Warning: Direct string interpolation is vulnerable to SQL injection. 
-                // Consider moving to parameterized queries later!
-                string SQLStr = $"SELECT * FROM {table} WHERE Username LIKE '{user.Username}'";
-                using (SqlCommand cmd = new SqlCommand(SQLStr, con))
-                {
-                    DataSet ds = new DataSet();
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    adapter.Fill(ds, table);
-
-                    if (ds.Tables[table].Rows.Count > 0)
-                    {
-                        return -1;
-                    }
-
-                    DataRow dr = ds.Tables[table].NewRow();
-                    dr["Firstname"] = user.FirstName;
-                    dr["Lastname"] = user.LastName;
-                    dr["Username"] = user.Username;
-                    dr["Password"] = user.Password;
-                    dr["Email"] = user.Email;
-                    dr["Phone"] = user.Phone;
-                    dr["Birthday"] = user.Birthday.ToString();
-                    dr["Admin"] = false;
-
-                    ds.Tables[table].Rows.Add(dr);
-
-                    using (SqlCommandBuilder builder = new SqlCommandBuilder(adapter))
-                    {
-                        int n = adapter.Update(ds, table);
-                        return n;
-                    }
-                }
+                return -1;
             }
+
+            DataRow dr = ds.Tables[table].NewRow();
+            dr["FirstName"] = user.FirstName; // תוקן ל-N גדולה
+            dr["LastName"] = user.LastName;   // תוקן ל-N גדולה
+            dr["Username"] = user.Username;
+            dr["Password"] = user.Password;
+            dr["Email"] = user.Email;
+            dr["Phone"] = user.Phone;
+            dr["Birthday"] = user.Birthday.ToString();
+            dr["Admin"] = false;
+
+            ds.Tables[table].Rows.Add(dr);
+
+            SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
+            int n = adapter.Update(ds, table);
+            return n;
         }
 
         public int ExecuteNonQuery(string SQL)
         {
-            using (SqlConnection con = new SqlConnection(conString))
-            {
-                using (SqlCommand cmd = new SqlCommand(SQL, con))
-                {
-                    con.Open();
-                    int n = cmd.ExecuteNonQuery();
-                    return n; // No need to call con.Close() manually; 'using' handles it.
-                }
-            }
+            SqlConnection con = new SqlConnection(conString);
+            SqlCommand cmd = new SqlCommand(SQL, con);
+
+            con.Open();
+            int n = cmd.ExecuteNonQuery();
+            con.Close();
+
+            return n;
         }
 
         public int Delete(int id, string table)
         {
-            if (id == 0) return -1;
+            if (id == 0)
+            {
+                return -1;
+            }
             string SQL = $"DELETE FROM {table} WHERE ID = {id}";
-            return ExecuteNonQuery(SQL);
+            int n = ExecuteNonQuery(SQL);
+            return n;
         }
 
         public int Update(User user, string table)
@@ -113,84 +99,105 @@ namespace ProjectNoy.Model
                 $"Email = '{user.Email}', Phone = '{user.Phone}',  Admin = '{user.Admin}', " +
                 $"Birthday = '{user.Birthday:MM-dd-yyyy HH:mm:ss}' " +
                 $"WHERE Id = {user.ID}";
-            return ExecuteNonQuery(SQL);
+            int n = ExecuteNonQuery(SQL);
+            return n;
+        }
+
+        // מתודת גישור עבור קובץ ה-Update.cshtml.cs שלך
+        public int UpdateUser(User user, string table = "Users")
+        {
+            return Update(user, table);
+        }
+
+        // מתודה חדשה לשליפת משתמש בודד לפי ה-ID שלו
+        public User GetUserById(int id, string table = "Users")
+        {
+            string sql = $"SELECT * FROM {table} WHERE Id = {id}";
+            DataTable dt = RetrieveTable(sql, table);
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                DataRow dr = dt.Rows[0];
+                User user = new User();
+                user.ID = Convert.ToInt32(dr["Id"]);
+                user.Username = dr["Username"].ToString();
+                user.Password = dr["Password"].ToString();
+                user.FirstName = dr["FirstName"].ToString();
+                user.LastName = dr["LastName"].ToString();
+                user.Email = dr["Email"].ToString();
+                user.Phone = dr["Phone"].ToString();
+                user.Birthday = dr["Birthday"].ToString(); // מציב ישירות כטקסט
+                user.Admin = Convert.ToBoolean(dr["Admin"]);
+
+                return user;
+            }
+            return null;
         }
 
         public int Update_disconnected(User user, string table)
         {
-            using (SqlConnection con = new SqlConnection(conString))
+            SqlConnection con = new SqlConnection(conString);
+
+            string SQLStr = $"SELECT * FROM {table} WHERE Id = {user.ID}";
+            SqlCommand cmd = new SqlCommand(SQLStr, con);
+            DataSet ds = new DataSet();
+
+            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+            adapter.Fill(ds, table);
+
+            if (ds.Tables[table].Rows.Count == 0)
             {
-                string SQLStr = $"SELECT * FROM {table} WHERE Id = {user.ID}";
-                using (SqlCommand cmd = new SqlCommand(SQLStr, con))
-                {
-                    DataSet ds = new DataSet();
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    adapter.Fill(ds, table);
-
-                    if (ds.Tables[table].Rows.Count == 0)
-                    {
-                        return -1;
-                    }
-
-                    DataRow dr = ds.Tables[table].Rows[0];
-                    dr["Firstname"] = user.FirstName;
-                    dr["Lastname"] = user.LastName;
-                    dr["Username"] = user.Username;
-                    dr["Password"] = user.Password;
-                    dr["Email"] = user.Email;
-                    dr["Phone"] = user.Phone;
-                    dr["Birthday"] = user.Birthday.ToString();
-                    dr["Admin"] = user.Admin;
-
-                    using (SqlCommandBuilder builder = new SqlCommandBuilder(adapter))
-                    {
-                        int n = adapter.Update(ds, table);
-                        return n;
-                    }
-                }
+                return -1;
             }
+
+            DataRow dr = ds.Tables[table].Rows[0];
+
+            dr["FirstName"] = user.FirstName; // תוקן ל-N גדולה
+            dr["LastName"] = user.LastName;   // תוקן ל-N גדולה
+            dr["Username"] = user.Username;
+            dr["Password"] = user.Password;
+            dr["Email"] = user.Email;
+            dr["Phone"] = user.Phone;
+            dr["Birthday"] = user.Birthday.ToString();
+            dr["Admin"] = user.Admin;
+
+            SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
+            int n = adapter.Update(ds, table);
+            return n;
         }
 
         public int Delete_disconnected(int id, string table)
         {
-            using (SqlConnection con = new SqlConnection(conString))
-            {
-                string SQLStr = $"SELECT * FROM {table} WHERE Id = {id}";
-                using (SqlCommand cmd = new SqlCommand(SQLStr, con))
-                {
-                    DataSet ds = new DataSet();
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    adapter.Fill(ds, table);
+            SqlConnection con = new SqlConnection(conString);
 
-                    if (ds.Tables[table].Rows.Count == 0) return -1;
+            string SQLStr = $"SELECT * FROM {table} WHERE Id = {id}";
+            SqlCommand cmd = new SqlCommand(SQLStr, con);
+            DataSet ds = new DataSet();
 
-                    ds.Tables[table].Rows[0].Delete();
+            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+            adapter.Fill(ds, table);
 
-                    using (SqlCommandBuilder builder = new SqlCommandBuilder(adapter))
-                    {
-                        int n = adapter.Update(ds, table);
-                        return n;
-                    }
-                }
-            }
+            ds.Tables[table].Rows[0].Delete();
+
+            SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
+            int n = adapter.Update(ds, table);
+            return n;
         }
 
         public object GetScalar(string SQL)
         {
-            using (SqlConnection con = new SqlConnection(conString))
-            {
-                using (SqlCommand cmd = new SqlCommand(SQL, con))
-                {
-                    con.Open();
-                    return cmd.ExecuteScalar();
-                }
-            }
+            SqlConnection con = new SqlConnection(conString);
+            SqlCommand cmd = new SqlCommand(SQL, con);
+
+            con.Open();
+            object scalar = cmd.ExecuteScalar();
+            con.Close();
+
+            return scalar;
         }
 
         public SqlDataReader GetDataReader(string SQL)
         {
-            // Do not use a 'using' statement on this specific connection, 
-            // because CommandBehavior.CloseConnection transfers connection management ownership to the reader.
             SqlConnection con = new SqlConnection(conString);
             SqlCommand cmd = new SqlCommand(SQL, con);
 

@@ -1,8 +1,8 @@
-﻿// loginValidation.js
+﻿
 
 document.addEventListener("DOMContentLoaded", function () {
     const loginForm = document.getElementById("loginForm");
-    const passwordInput = document.getElementById("psw");
+    const passwordInput = document.getElementById("Password");
     const errorSpan = document.getElementById("passError");
 
     // פונקציית הבדיקה לסיסמה

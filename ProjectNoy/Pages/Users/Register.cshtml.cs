@@ -4,17 +4,15 @@ using ProjectNoy.Model;
 
 namespace ProjectNoy.Pages.Users
 {
+
     public class RegisterModel : PageModel
     {
         [BindProperty]
         public User NewUser { get; set; }
         public string msg { get; set; } = string.Empty;
-
         public void OnGet()
         {
-
         }
-
         public IActionResult OnPost()
         {
             Helper helper = new Helper();
@@ -24,8 +22,7 @@ namespace ProjectNoy.Pages.Users
                 msg = "Username already taken.";
                 return Page();
             }
-
-            return RedirectToPage("Login_SQL");
+            return RedirectToPage("/Users/Login");
         }
     }
 }

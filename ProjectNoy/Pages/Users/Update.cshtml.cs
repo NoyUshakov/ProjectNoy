@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using ProjectNoy.Model;
+using ProjectNoy.Model; // ודא שקיים ה-using הזה
+using System;
 using System.Data;
 
 namespace ProjectNoy.Pages.Users
@@ -28,7 +28,7 @@ namespace ProjectNoy.Pages.Users
             NewUser.Email = dr["Email"].ToString();
             NewUser.Phone = dr["Phone"].ToString();
             NewUser.Admin = (bool)dr["Admin"];
-            NewUser.Birthday = DateTime.Parse(dr["Birthday"].ToString());
+            NewUser.Birthday = dr["Birthday"].ToString();
 
             return Page();
 

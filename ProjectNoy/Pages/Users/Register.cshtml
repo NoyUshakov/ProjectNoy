@@ -1,53 +1,81 @@
 ﻿@page
 @model ProjectNoy.Pages.Users.RegisterModel
 @{
+    ViewData["Title"] = "Register";
 }
-<h1>Register</h1>
 
-<h4>User</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div class="form-group">
-                <label asp-for="NewUser.FirstName" class="control-label"></label>
-                <input asp-for="NewUser.FirstName" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="NewUser.LastName" class="control-label"></label>
-                <input asp-for="NewUser.LastName" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="NewUser.Username" class="control-label"></label>
-                <input asp-for="NewUser.Username" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="NewUser.Password" class="control-label"></label>
-                <input asp-for="NewUser.Password" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="NewUser.Email" class="control-label"></label>
-                <input asp-for="NewUser.Email" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="NewUser.Phone" class="control-label"></label>
-                <input asp-for="NewUser.Phone" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="NewUser.Birthday" class="control-label"></label>
-                <input asp-for="NewUser.Birthday" class="form-control" type="date" />
-            </div>
-            @if (Model.msg != "")
-            {
-                <div class="form-group">
-                    <div class="alert alert-danger" role="alert">
-                        @Model.msg
-                    </div>
-                </div>
-            }
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+<form method="post" onsubmit="return validateRegister();">
+    <div class="container mt-4 text-white" style="max-width: 600px; background: #212529; padding: 30px; border-radius: 10px;">
+        <h1 class="text-center text-primary mb-4">הירשם לאתר עוד היום!</h1>
+        <hr class="bg-secondary">
+
+        @if (!string.IsNullOrEmpty(Model.msg))
+        {
+            <div class="alert alert-danger text-center">@Model.msg</div>
+        }
+
+        <div class="mb-3">
+            <label class="form-label"><b>שם משתמש</b></label>
+            <input type="text" id="username" asp-for="NewUser.Username" class="form-control" />
+            <span class="error text-danger small" id="usernameErr"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label"><b>סיסמה</b></label>
+            <input type="password" id="Password" asp-for="NewUser.Password" class="form-control" />
+            <span class="error text-danger small" id="passwordErr"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label"><b>אימות סיסמה</b></label>
+            <input type="password" id="repass" class="form-control" />
+            <span class="error text-danger small" id="confirmPasswordErr"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label"><b>שם פרטי</b></label>
+            <input type="text" id="firstName" asp-for="NewUser.FirstName" class="form-control" />
+            <span class="error text-danger small" id="firstNameErr"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label"><b>שם משפחה</b></label>
+            <input type="text" id="lastName" asp-for="NewUser.LastName" class="form-control" />
+            <span class="error text-danger small" id="lastNameErr"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label"><b>תאריך לידה</b></label>
+            <input type="date" id="Birthday" asp-for="NewUser.Birthday" class="form-control" />
+            <span class="error text-danger small" id="BirthdayErr"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label"><b>עיר</b></label>
+            <input type="text" id="city" asp-for="NewUser.City" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label"><b>טלפון</b></label>
+            <input type="text" id="phone" asp-for="NewUser.Phone" placeholder="05X-XXXXXXX" class="form-control" />
+            <span class="error text-danger small" id="phoneErr"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label"><b>דוא״ל</b></label>
+            <input type="text" id="email" asp-for="NewUser.Email" class="form-control" />
+            <span class="error text-danger small" id="emailErr"></span>
+        </div>
+
+        <hr class="bg-secondary">
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary w-50">הירשם</button>
+            <button type="reset" class="btn btn-outline-secondary w-50">אפס טופס</button>
+        </div>
     </div>
-</div>
+</form>
+
+@section Scripts {
+    <script src="~/js/signup.js"></script>
+}

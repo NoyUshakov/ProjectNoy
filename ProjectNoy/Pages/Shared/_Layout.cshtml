@@ -1,12 +1,16 @@
-﻿﻿@using Microsoft.AspNetCore.Http
+﻿@using Microsoft.AspNetCore.Http
 @{
-    var sessionValue = Context.Session.GetString("login");
-    //var adminValue = Context.Session.GetString("admin");
+    // תיקון: שינוי ל-L גדולה כדי שיתאים בדיוק למה שנשמר ב-Login.cshtml.cs
+    var sessionValue = Context.Session.GetString("Login");
+
+    // אם תרצה להחזיר את ה-Session של האדמין בעתיד, שים לב גם פה ל-A גדולה:
+    // var adminValue = Context.Session.GetString("Admin");
     var adminValue = true;
 }
 
 <!DOCTYPE html>
-<html lang="he">
+<html lang="he" dir="rtl">
+ @* הוספתי dir="rtl" כדי שהתפריט העברי ישב יפה מימין לשמאל *@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -26,39 +30,40 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                     
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/classical">מוזיקה קלאסית</a>
+                            <a class="nav-link text-light" asp-area="" asp-page="/classical">מוזיקה קלאסית</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/rap">היפ-הופ/ראפ</a>
+                            <a class="nav-link text-light" asp-area="" asp-page="/rap">היפ-הופ/ראפ</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/rock">רוק</a>
+                            <a class="nav-link text-light" asp-area="" asp-page="/rock">רוק</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/pop">פופ</a>
+                            <a class="nav-link text-light" asp-area="" asp-page="/pop">פופ</a>
                         </li>
-                       
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/login">התחבר</a>
+                            <a class="nav-link text-light" asp-page="/Users/Login">התחבר</a>
                         </li>
                         @if (adminValue == true)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Users/UsersTable">טבלת משתמשים</a>
+                                <a class="nav-link text-light" asp-area="" asp-page="/Users/UsersTable">טבלת משתמשים</a>
                             </li>
                         }
                     </ul>
+
                     @if (string.IsNullOrEmpty(sessionValue))
                     {
-                        <span class="navbar-text">שלום אורח!</span>
+                        <span class="navbar-text text-light">שלום אורח!</span>
                     }
                     else
                     {
-                        <span class="navbar-text">welcome @sessionValue</span>
+                        <span class="navbar-text text-light me-3">welcome @sessionValue</span>
                         <div class="d-flex">
-                            <a class="btn btn-outline-dark btn-sm ms-1" href="/Users/Logout" role="button">התנתק</a>
+                            <a class="btn btn-outline-light btn-sm ms-1" href="/Users/Logout" role="button">התנתק</a>
                         </div>
                     }
                 </div>
@@ -73,7 +78,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - אתר המוזיקה - <a asp-area="" asp-page="/Privacy"></a>
+            &copy; 2026 - אתר המוזיקה - <a asp-area="" asp-page="/Privacy"></a>
         </div>
     </footer>
 
