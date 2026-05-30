@@ -8,48 +8,32 @@ namespace ProjectNoy.Pages.Users
 {
     public class LoginModel : PageModel
     {
+        public string msg { get; set; } = string.Empty;
         [BindProperty]
         public string Username { get; set; }
-
         [BindProperty]
         public string Password { get; set; }
-
-        public string ErrorMessage { get; set; }
-
         public void OnGet()
         {
         }
-
         public IActionResult OnPost()
         {
-            // 1. יצירת מופע של מחלקת העזר שלך
+            string SQLStr = $"SELECT * FROM Users WHERE Username LIKE '{Username}' AND Password LIKE '{Password}'";
             Helper helper = new Helper();
+            DataTable dt = helper.RetrieveTable(SQLStr, "Users");
 
-            // 2. בניית השאילתה לבדיקת פרטי המשתמש
-            string sql = $"SELECT * FROM Users WHERE Username = '{Username}' AND Password = '{Password}'";
-
-            // 3. קריאה לפונקציה המדויקת מה-Helper שלך (RetrieveTable)
-            // שלחנו את השאילתה ואת שם הטבלה "Users" כפי שהפונקציה דורשת
-            DataTable dt = helper.RetrieveTable(sql, "Users");
-
-            // 4. בדיקה האם חזר משתמש תואם מהחלון
+            // בתוך ה-OnPost של ה-Login
             if (dt != null && dt.Rows.Count > 0)
             {
-                // המשתמש נמצא! נשמור את הפרטים שלו ב-Session כדי שהאתר יזהה אותו
                 HttpContext.Session.SetString("Username", dt.Rows[0]["Username"].ToString());
+                // חשוב: אנחנו נשמור את הערך כ-string קטן ("true" או "false")
+                bool isAdmin = Convert.ToBoolean(dt.Rows[0]["Admin"]);
+                HttpContext.Session.SetString("Admin", isAdmin.ToString());
 
-                // שמירת סטטוס הניהול (Admin) שלו
-                HttpContext.Session.SetString("IsAdmin", dt.Rows[0]["Admin"].ToString());
-
-                // העברה חלקה לדף הבית של האתר
                 return RedirectToPage("/Index");
             }
-            else
-            {
-                // אם הטבלה ריקה - הפרטים שגויים
-                ErrorMessage = "שם משתמש או סיסמה שגויים. נסה שנית.";
-                return Page();
-            }
+            msg = "Wrong username or password.";
+            return Page();
         }
     }
 }

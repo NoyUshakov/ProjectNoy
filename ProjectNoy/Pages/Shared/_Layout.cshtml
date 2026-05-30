@@ -1,11 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Http
 @{
     // תיקון: שינוי ל-L גדולה כדי שיתאים בדיוק למה שנשמר ב-Login.cshtml.cs
-    var sessionValue = Context.Session.GetString("Login");
+    var sessionValue = Context.Session.GetString("Username");
 
     // אם תרצה להחזיר את ה-Session של האדמין בעתיד, שים לב גם פה ל-A גדולה:
-    // var adminValue = Context.Session.GetString("Admin");
-    var adminValue = true;
+    var adminValue = Context.Session.GetString("Admin");
+   // var adminValue = true;
 }
 
 <!DOCTYPE html>
@@ -47,7 +47,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-page="/Users/Login">התחבר</a>
                         </li>
-                        @if (adminValue == true)
+                        @if (adminValue == "True")
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-area="" asp-page="/Users/UsersTable">טבלת משתמשים</a>

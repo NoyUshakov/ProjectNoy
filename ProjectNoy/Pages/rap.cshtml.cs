@@ -8,7 +8,7 @@ namespace ProjectNoy.Pages
             {
     public IActionResult OnGet()
         {
-            string login = HttpContext.Session.GetString("login");
+            string login = HttpContext.Session.GetString("Username");
             if (string.IsNullOrEmpty(login))
             {
                 return RedirectToPage("/AccessDenied");

@@ -2,71 +2,37 @@
 @model ProjectNoy.Pages.Users.UsersTableModel
 @using System.Data
 
-@{
-    ViewData["Title"] = "Users Table Management";
-}
-
 <div class="container mt-4 text-white">
     <h1 class="mb-4 text-center fw-bold" style="color: #0d6efd;">👥 Users Table Management</h1>
 
     <div class="row g-3 mb-4 bg-dark p-3 rounded shadow-sm border border-secondary">
-
-        <div class="col-md-4">
-            <form method="post" asp-page-handler="Filter">
-                <label class="form-label text-light small fw-bold">Filter Users:</label>
-                <div class="input-group">
-                    <input asp-for="filter" type="text" class="form-control" placeholder="Search text...">
-                    <button type="submit" class="btn btn-primary" id="Filter_btn">
-                        <i class="bi bi-funnel"></i> Filter
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <div class="col-md-5">
-            <form method="post" asp-page-handler="Sort">
-                <label class="form-label text-light small fw-bold">Sort Table By:</label>
-                <div class="input-group">
-                    <select asp-for="column" class="form-select">
-                        <option value="UserId" selected>Id</option>
-                        <option value="Username">Username</option>
-                        <option value="Email">Email</option>
-                        <option value="Firstname">Firstname</option>
-                        <option value="Lastname">Lastname</option>
-                    </select>
-                    <select asp-for="Order" class="form-select">
-                        <option value="ASC">Ascending</option>
-                        <option value="DESC">Descending</option>
-                    </select>
-                    <button class="btn btn-success" type="submit" id="Sort_btn">Sort</button>
-                </div>
-            </form>
-        </div>
-
         <div class="col-md-3">
             <form method="post" asp-page-handler="Delete">
                 <label class="form-label text-light small fw-bold">Delete User:</label>
                 <div class="input-group">
                     <input asp-for="UserId" class="form-control" placeholder="User ID">
-                    <button class="btn btn-danger" type="submit" id="Delete_btn">Delete</button>
+                    <button class="btn btn-danger" type="submit">Delete</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div class="table-responsive bg-dark p-3 rounded shadow-sm border border-secondary">
-        <table class="table table-dark table-striped table-hover align-middle mb-0">
+    <div class="table-responsive bg-dark p-3 rounded">
+        <table class="table table-dark table-striped">
             <thead>
                 <tr>
-                    @foreach (DataColumn column in Model.dt.Columns)
+                    @if (Model.dt != null)
                     {
-                        <th class="text-info font-monospace">@column.ColumnName</th>
+                        @foreach (DataColumn column in Model.dt.Columns)
+                        {
+                            <th>@column.ColumnName</th>
+                        }
                     }
-                    <th class="text-center text-warning">Actions</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @if (Model.dt != null && Model.dt.Rows.Count > 0)
+                @if (Model.dt != null)
                 {
                     @foreach (DataRow row in Model.dt.Rows)
                     {
@@ -75,21 +41,11 @@
                             {
                                 <td>@row[column]</td>
                             }
-                            <td class="text-center">
-                                <a asp-page="/Users/Update" asp-route-param="@row["Id"]" class="btn btn-sm btn-outline-warning px-3">
-                                    Update
-                                </a>
+                            <td>
+                                <a asp-page="/Users/Update" asp-route-id="@row["Id"]" class="btn btn-sm btn-outline-warning">Update</a>
                             </td>
                         </tr>
                     }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="@(Model.dt?.Columns.Count + 1 ?? 1)" class="text-center text-muted py-4">
-                            No users found in the database.
-                        </td>
-                    </tr>
                 }
             </tbody>
         </table>
